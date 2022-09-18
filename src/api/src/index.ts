@@ -1,14 +1,19 @@
 import { ApolloServer } from 'apollo-server';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import { GQLTypeDefinitions } from './gql-type-definitions';
+import { ZipCodeFinderDatasource } from './datasource/zip-code-finder.datasource';
+import { Queries } from './queries';
 
 const Server = new ApolloServer({
-  typeDefs: GQLTypeDefinitions,
+  typeDefs: Queries.TypeDefinitions,
+  resolvers: Queries.Resolvers,
   csrfPrevention: true,
   cache: 'bounded',
   plugins: [
     ApolloServerPluginLandingPageLocalDefault({ embed: true })
-  ]
+  ],
+  dataSources: () => ({
+    zipCode: new ZipCodeFinderDatasource()
+  })
 });
 
 Server.listen({ port: 4001 }).then(({ url }) => {

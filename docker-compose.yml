@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  api:
+    image: node:16
+    container_name: zipcodefinder-api
+    command: sh -c 'npm ci && npm run start:dev'
+    volumes:
+      - ./src/api:/home/node/app
+    working_dir: /home/node/app
+    ports:
+      - 5320:4001

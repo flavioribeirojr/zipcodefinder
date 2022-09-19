@@ -11,39 +11,39 @@ const ZipCodeFindQuery = gql`
 `;
 
 export function useZipcodeFinderService() {
-    const [ find ] = useLazyQuery<{ zipCode: ZipCodeInfo }>(ZipCodeFindQuery);
+  const [ find ] = useLazyQuery<{ zipCode: ZipCodeInfo }>(ZipCodeFindQuery);
 
-    async function findZipCode(input: ZipCodeFindQueryInput) {
-        const response = await find({
-            variables: {
-                zipCode: input.zipCode,
-                countryCode: input.countryCode
-            }
-        });
+  async function findZipCode(input: ZipCodeFindQueryInput) {
+    const response = await find({
+      variables: {
+        zipCode: input.zipCode,
+        countryCode: input.countryCode
+      }
+    });
 
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data) {
-            throw new Error('Zip code information not found');
-        }
-
-        return response.data.zipCode;
+    if (response.error) {
+      throw response.error;
     }
 
-    return {
-        findZipCode
+    if (!response.data) {
+      throw new Error('Zip code information not found');
     }
+
+    return response.data.zipCode;
+  }
+
+  return {
+    findZipCode
+  };
 }
 
 export interface ZipCodeInfo {
-    zipCode: string;
-    city: string;
-    stateCode: string;
+  zipCode: string;
+  city: string;
+  stateCode: string;
 }
 
 export interface ZipCodeFindQueryInput {
-    zipCode: string;
-    countryCode: string;
+  zipCode: string;
+  countryCode: string;
 }
